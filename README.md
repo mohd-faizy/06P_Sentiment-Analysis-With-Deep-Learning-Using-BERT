@@ -32,17 +32,24 @@ pip install transformers
 ```
 
 
-## Task 1: An introduction to some basic theory behind BERT, and the problem we will be using it to solve
+### 1: An introduction to some basic theory behind BERT, and the problem we will be using it to solve
 
-## Task 2: Explore dataset distribution and some basic preprocessing
+### 2: Explore dataset distribution and some basic preprocessing
 
-## Task 3: Split dataset into training and validation using stratified approach
+### 3: Split dataset into training and validation using stratified approach
 
-## Task 4: Loading pretrained tokenizer to encode our text data into numerical values (tensors)
+### 4: Loading pretrained tokenizer to encode our text data into numerical values (tensors)
 
-## Task 5: Load in pretrained BERT with custom final layer
-## Task 6: Create dataloaders to facilitate batch processing
-## Task 7: Choose and optimizer and scheduler to control training of model
-## Task 8: Design performance metrics for our problem
-## Task 9: Create a training loop to control PyTorch finetuning of BERT using CPU or GPU acceleration
-## Task 10: Load in a pre-saved finetuned BERT model and evaluate its performance, and some final thoughts
+### 5: Load in pretrained BERT with custom final layer
+
+### 6: Create dataloaders to facilitate batch processing
+
+### 7: Choose and optimizer and scheduler to control training of model
+
+### 8: Design performance metrics for our problem
+
+### 9: Create a training loop to control PyTorch finetuning of BERT using CPU or GPU acceleration
+
+### 10: Loading finetuned BERT model and evaluate its performance
+
+### 11: Oth-Resources
