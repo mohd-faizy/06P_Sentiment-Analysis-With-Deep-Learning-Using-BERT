@@ -1,6 +1,8 @@
 # Sentiment Analysis with Deep Learning using BERT
 
 __Bidirectional Encoder Representations from Transformers__ 
+
+
 Finetuning BERT in PyTorch for sentiment analysis.
 ![BERT](https://miro.medium.com/max/700/0*ViwaI3Vvbnd-CJSQ.png)
 
