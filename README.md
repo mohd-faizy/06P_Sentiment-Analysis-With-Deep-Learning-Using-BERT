@@ -1,13 +1,58 @@
 # Sentiment Analysis with Deep Learning using BERT
 
-__Bidirectional Encoder Representations from Transformers__ 
+<img src='https://thenewsstrike.com/wp-content/uploads/2020/04/Sentiment-Analysis-1024x457.jpg'>
+
+## What are some variants of BERT?
+
+> BERT has inspired many variants: __RoBERTa, XLNet, MT-DNN, SpanBERT, VisualBERT, K-BERT, HUBERT__ and more. Some variants attempt to compress the model: __TinyBERT, ALERT, DistilBERT__ and more. We describe a few of the variants that outperform BERT in many tasks
+
+> RoBERTa: Showed that the original BERT was undertrained. RoBERTa is trained longer, on more data; with bigger batches and longer sequences; without NSP; and dynamically changes the masking pattern.
+
+> ALBERT: Uses parameter reduction techniques to yield a smaller model. To utilize inter-sentence coherence, ALBERT uses Sentence-Order Prediction (SOP) instead of NSP.
+XLNet: Doesn't do masking but uses permutation to capture bidirectional context. It combines the best of denoising autoencoding of BERT and autoregressive language modelling of Transformer-XL.
+
+> MT-DNN: Uses BERT with additional multi-task training on NLU tasks. Cross-task data leads to regularization and more general representations.
+
+<img src='https://devopedia.org/images/article/241/9991.1575378177.jpg'>
+
+
+## __Dataset__
+> We will use the [__SMILE Twitter DATASET__](https://doi.org/10.6084/m9.figshare.3187909.v2)
+
+## __Objective__
+
+:one: To Understand what __Sentiment Analysis__ is, and how to approach the problem from a neural network perspective.
+
+:two: Loading in pretrained BERT with custom output layer.
+
+:three: Train and evaluate finetuned BERT architecture on Sentiment Analysis.
+
+
+## __What is BERT?__
+
+__Bidirectional Encoder Representations from Transformers (BERT)__ is a Transformer-based machine learning technique for natural language processing (NLP) pre-training developed by Google.BERT is a deeply bidirectional, unsupervised language representation, pre-trained using only a plain text corpus. Context-free models such as word2vec or GloVe generate a single word embedding representation for each word in the vocabulary, where BERT takes into account the context for each occurrence of a given word.
+
+
+## What are some variants of BERT?
+
+> BERT has inspired many variants: __RoBERTa, XLNet, MT-DNN, SpanBERT, VisualBERT, K-BERT, HUBERT__ and more. Some variants attempt to compress the model: __TinyBERT, ALERT, DistilBERT__ and more. We describe a few of the variants that outperform BERT in many tasks
+
+> RoBERTa: Showed that the original BERT was undertrained. RoBERTa is trained longer, on more data; with bigger batches and longer sequences; without NSP; and dynamically changes the masking pattern.
+
+> ALBERT: Uses parameter reduction techniques to yield a smaller model. To utilize inter-sentence coherence, ALBERT uses Sentence-Order Prediction (SOP) instead of NSP.
+XLNet: Doesn't do masking but uses permutation to capture bidirectional context. It combines the best of denoising autoencoding of BERT and autoregressive language modelling of Transformer-XL.
+
+> MT-DNN: Uses BERT with additional multi-task training on NLU tasks. Cross-task data leads to regularization and more general representations.
+
+<img src='https://devopedia.org/images/article/241/9991.1575378177.jpg'>
+
 
 
 Finetuning BERT in PyTorch for sentiment analysis.
 ![BERT](https://miro.medium.com/max/700/0*ViwaI3Vvbnd-CJSQ.png)
 
 
-- __BERT__ is basically the advancement of the __RNNs__, as its able to Parallelize the Processing and Training. For Example $\rightarrow$ In sentence we have to process each word sequentially, __BERT__ allow us to do the things in Parellel.
+- __BERT__ is basically the advancement of the __RNNs__, as its able to Parallelize the Processing and Training. For __Example__ - In sentence we have to process each word sequentially, __BERT__ allow us to do the things in Parellel.
 - __BERT__ is a large-scale transformer-based Language Model that can be finetuned for a variety of tasks.
 
 ![Embeddings](https://mengxinji.github.io/Blog/images/bert/embedding.jpg)
@@ -33,25 +78,45 @@ pip install transformers
 
 ```
 
+:black_circle::zero::one: An introduction to some basic theory behind BERT, and the problem we will be using it to solve
 
-### 1: An introduction to some basic theory behind BERT, and the problem we will be using it to solve
+:large_blue_circle::zero::two: Explore dataset distribution and some basic preprocessing
 
-### 2: Explore dataset distribution and some basic preprocessing
+:black_circle::zero::three: Split dataset into training and validation using stratified approach
 
-### 3: Split dataset into training and validation using stratified approach
+:large_blue_circle::zero::four: Loading pretrained tokenizer to encode our text data into numerical values (tensors)
 
-### 4: Loading pretrained tokenizer to encode our text data into numerical values (tensors)
+:black_circle::zero::five: Load in pretrained BERT with custom final layer
 
-### 5: Load in pretrained BERT with custom final layer
+:large_blue_circle::zero::six: Create dataloaders to facilitate batch processing
 
-### 6: Create dataloaders to facilitate batch processing
+:black_circle::zero::seven: Choose and optimizer and scheduler to control training of model
 
-### 7: Choose and optimizer and scheduler to control training of model
+:large_blue_circle::zero::eight: Design performance metrics for our problem
 
-### 8: Design performance metrics for our problem
+:black_circle::zero::nine: Create a training loop to control PyTorch finetuning of BERT using CPU or GPU acceleration
 
-### 9: Create a training loop to control PyTorch finetuning of BERT using CPU or GPU acceleration
+:large_blue_circle::one::zero: Loading finetuned BERT model and evaluate its performance
 
-### 10: Loading finetuned BERT model and evaluate its performance
+:black_circle::one::one: Oth-Resources
 
-### 11: Oth-Resources
+### Connect with me:
+
+
+[<img align="left" alt="codeSTACKr | Twitter" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg" />][twitter]
+[<img align="left" alt="codeSTACKr | LinkedIn" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />][linkedin]
+[<img align="left" alt="codeSTACKr.com" width="22px" src="https://raw.githubusercontent.com/iconic/open-iconic/master/svg/globe.svg" />][StackExchange AI]
+
+[twitter]: https://twitter.com/F4izy
+[linkedin]: https://www.linkedin.com/in/faizy-mohd-836573122/
+[StackExchange AI]: https://ai.stackexchange.com/users/36737/cypher
+
+
+---
+
+
+![Faizy's github stats](https://github-readme-stats.vercel.app/api?username=mohd-faizy&show_icons=true)
+
+
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mohd-faizy&layout=compact)](https://github.com/mohd-faizy/github-readme-stats)
+
