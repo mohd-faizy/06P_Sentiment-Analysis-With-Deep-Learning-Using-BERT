@@ -7,7 +7,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)](https://github.com/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/issues)
 [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://opensource.com/resources/what-open-source)
 ![Stars GitHub](https://img.shields.io/github/stars/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)
-[![GitHub license](https://img.shields.io/github/license/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)](https://github.com/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/blob/main/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)](https://github.com/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/blob/master/LICENSE)
 ![Size](https://img.shields.io/github/repo-size/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)
 
 # Sentiment Analysis with Deep Learning using BERT
