@@ -12,7 +12,9 @@
 
 # Sentiment Analysis with Deep Learning using BERT
 
-<img src='https://thenewsstrike.com/wp-content/uploads/2020/04/Sentiment-Analysis-1024x457.jpg'>
+<p align='center'>
+  <a href="#"><img src='https://github.com/mohd-faizy/DataScience-Projects/blob/main/Projects_png/06_proj.png'></a>
+</p>
 
 
 ## __What is BERT?__
@@ -77,27 +79,27 @@ pip install transformers
 
 ```
 
-:black_circle::zero::one: An introduction to some basic theory behind BERT, and the problem we will be using it to solve
+>:one: An introduction to some basic theory behind BERT, and the problem we will be using it to solve
 
-:large_blue_circle::zero::two: Explore dataset distribution and some basic preprocessing
+>:two: Explore dataset distribution and some basic preprocessing
 
-:black_circle::zero::three: Split dataset into training and validation using stratified approach
+>:three: Split dataset into training and validation using stratified approach
 
-:large_blue_circle::zero::four: Loading pretrained tokenizer to encode our text data into numerical values (tensors)
+>:four: Loading pretrained tokenizer to encode our text data into numerical values (tensors)
 
-:black_circle::zero::five: Load in pretrained BERT with custom final layer
+>:five: Load in pretrained BERT with custom final layer
 
-:large_blue_circle::zero::six: Create dataloaders to facilitate batch processing
+>:zero::six: Create dataloaders to facilitate batch processing
 
-:black_circle::zero::seven: Choose and optimizer and scheduler to control training of model
+>:seven: Choose and optimizer and scheduler to control training of model
 
-:large_blue_circle::zero::eight: Design performance metrics for our problem
+>:zero::eight: Design performance metrics for our problem
 
-:black_circle::zero::nine: Create a training loop to control PyTorch finetuning of BERT using CPU or GPU acceleration
+>:zero::nine: Create a training loop to control PyTorch finetuning of BERT using CPU or GPU acceleration
 
-:large_blue_circle::one::zero: Loading finetuned BERT model and evaluate its performance
+>:one::zero: Loading finetuned BERT model and evaluate its performance
 
-:black_circle::one::one: Oth-Resources
+>:one::one: Oth-Resources
 
 ### Connect with me:
 
