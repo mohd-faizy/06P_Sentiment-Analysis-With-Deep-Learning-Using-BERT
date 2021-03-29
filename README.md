@@ -79,19 +79,19 @@ pip install transformers
 
 ```
 
->:one: An introduction to some basic theory behind BERT, and the problem we will be using it to solve
+>:zero::one: An introduction to some basic theory behind BERT, and the problem we will be using it to solve
 
->:two: Explore dataset distribution and some basic preprocessing
+>:zero::two: Explore dataset distribution and some basic preprocessing
 
->:three: Split dataset into training and validation using stratified approach
+>:zero::three: Split dataset into training and validation using stratified approach
 
->:four: Loading pretrained tokenizer to encode our text data into numerical values (tensors)
+>:zero::four: Loading pretrained tokenizer to encode our text data into numerical values (tensors)
 
->:five: Load in pretrained BERT with custom final layer
+>:zero::five: Load in pretrained BERT with custom final layer
 
 >:zero::six: Create dataloaders to facilitate batch processing
 
->:seven: Choose and optimizer and scheduler to control training of model
+>:zero::seven: Choose and optimizer and scheduler to control training of model
 
 >:zero::eight: Design performance metrics for our problem
 
