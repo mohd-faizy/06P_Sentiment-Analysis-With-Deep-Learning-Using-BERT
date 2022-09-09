@@ -2,7 +2,7 @@
 ![made-with-Markdown](https://img.shields.io/badge/Made%20with-markdown-blue)
 ![Language](https://img.shields.io/github/languages/top/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)
 ![Platform](https://img.shields.io/badge/platform-Visual%20Studio%20Code-blue)
-![Maintained](https://img.shields.io/maintenance/yes/2020)
+![Maintained](https://img.shields.io/maintenance/yes/2022)
 ![Last Commit](https://img.shields.io/github/last-commit/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)
 [![GitHub issues](https://img.shields.io/github/issues/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)](https://github.com/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/issues)
 [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://opensource.com/resources/what-open-source)
@@ -104,9 +104,9 @@ pip install transformers
 ### Connect with me:
 
 
-[<img align="left" alt="codeSTACKr | Twitter" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg" />][twitter]
-[<img align="left" alt="codeSTACKr | LinkedIn" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />][linkedin]
-[<img align="left" alt="codeSTACKr.com" width="22px" src="https://raw.githubusercontent.com/iconic/open-iconic/master/svg/globe.svg" />][StackExchange AI]
+[<img align="left" | Twitter" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg" />][twitter]
+[<img align="left" | LinkedIn" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />][linkedin]
+[<img align="left"  width="22px" src="https://raw.githubusercontent.com/iconic/open-iconic/master/svg/globe.svg" />][StackExchange AI]
 
 [twitter]: https://twitter.com/F4izy
 [linkedin]: https://www.linkedin.com/in/faizy-mohd-836573122/
