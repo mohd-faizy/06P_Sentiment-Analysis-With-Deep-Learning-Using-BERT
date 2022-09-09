@@ -104,9 +104,9 @@ pip install transformers
 ### Connect with me:
 
 
-[<img align="left" | Twitter" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg" />][twitter]
-[<img align="left" | LinkedIn" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />][linkedin]
-[<img align="left"  width="22px" src="https://raw.githubusercontent.com/iconic/open-iconic/master/svg/globe.svg" />][StackExchange AI]
+[<img align="left" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg" width="22px"/>][twitter]
+[<img align="left" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" width="22px"/>][linkedin]
+[<img align="left" src="https://raw.githubusercontent.com/iconic/open-iconic/master/svg/globe.svg" width="22px"/>][StackExchange AI]
 
 [twitter]: https://twitter.com/F4izy
 [linkedin]: https://www.linkedin.com/in/faizy-mohd-836573122/
