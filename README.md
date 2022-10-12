@@ -21,7 +21,7 @@
 
 __Bidirectional Encoder Representations from Transformers (BERT)__ is a Transformer-based machine learning technique for natural language processing (NLP) pre-training developed by Google.BERT is a deeply bidirectional, unsupervised language representation, pre-trained using only a plain text corpus. Context-free models such as word2vec or GloVe generate a single word embedding representation for each word in the vocabulary, where BERT takes into account the context for each occurrence of a given word.
 
-<img src='https://www.researchgate.net/publication/335238076/figure/fig3/AS:793590422855682@1566218109398/Overall-architecture-of-LCF-design-BERT-shared-layer-is-alternative-to-substitute-for.ppm'>
+<img src='_img\bert.png'>
 
 ## What are some variants of BERT?
 
