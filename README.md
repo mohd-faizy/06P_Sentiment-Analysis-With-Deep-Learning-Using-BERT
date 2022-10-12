@@ -101,23 +101,21 @@ pip install transformers
 
 >:one::one: Oth-Resources
 
-### Connect with me:
+<p align='center'>
+  <a href="#"><img src='https://tymsai.netlify.app/resource/1.gif' height='10' width=100% alt="div"></a>
+</p>
+
+#### $\color{skyblue}{\textbf{Connect with me:}}$
 
 
-[<img align="left" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg" width="22px"/>][twitter]
-[<img align="left" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" width="22px"/>][linkedin]
-[<img align="left" src="https://raw.githubusercontent.com/iconic/open-iconic/master/svg/globe.svg" width="22px"/>][StackExchange AI]
+[<img align="left" src="https://cdn4.iconfinder.com/data/icons/social-media-icons-the-circle-set/48/twitter_circle-512.png" width="32px"/>][twitter]
+[<img align="left" src="https://cdn-icons-png.flaticon.com/512/145/145807.png" width="32px"/>][linkedin]
+[<img align="left" src="https://d31pjuirwqbaad.cloudfront.net/wp-content/uploads/2019/08/kissclipart-website-icon-png-clipart-computer-icons-ac62ecb3b8ae4d41.png?x61175" width="32px"/>][Portfolio]
 
 [twitter]: https://twitter.com/F4izy
-[linkedin]: https://www.linkedin.com/in/faizy-mohd-836573122/
-[StackExchange AI]: https://ai.stackexchange.com/users/36737/cypher
-
+[linkedin]: https://www.linkedin.com/in/mohd-faizy/
+[Portfolio]: https://mohdfaizy.com/
 
 ---
 
-
-![Faizy's github stats](https://github-readme-stats.vercel.app/api?username=mohd-faizy&show_icons=true)
-
-
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mohd-faizy&layout=compact)](https://github.com/mohd-faizy/github-readme-stats)
-
+<img src="https://github-readme-stats.vercel.app/api?username=mohd-faizy&show_icons=true" width=380px height=200px />
