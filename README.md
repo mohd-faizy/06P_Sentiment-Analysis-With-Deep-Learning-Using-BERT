@@ -445,39 +445,6 @@ For reference, BERT achieved the following state-of-the-art results on major ben
 
 ---
 
-## 📂 Project Structure
-
-```
-06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/
-│
-├── Sentiment_Analysis_using_BERT.ipynb      # Main Jupyter notebook (Colab & local ready)
-├── download_data.py                         # Automated dataset downloader with mirrors
-├── main.py                                  # Entry point script
-├── pyproject.toml                           # Modern project metadata & dependencies
-├── requirements.txt                         # Pip package dependencies
-├── .gitignore                               # Git ignore configuration
-├── .python-version                          # Python version specification
-│
-├── data/
-│   └── smile-annotations-final.csv            # SMILE Twitter Emotion dataset
-│
-├── assets/
-│   ├── adamw_algorithm.png                    # AdamW decoupled weight decay algorithm
-│   ├── banner.png                             # Project header banner
-│   ├── bert.png                               # BERT bidirectional architecture diagram
-│   ├── bert_embeddings.jpg                    # BERT input embeddings representation
-│   ├── bert_finetuning.png                    # BERT fine-tuning workflow diagram
-│   ├── flatten_layer.png                      # Output logits flattening representation
-│   ├── multi_head_attention.png               # Multi-head attention mechanism
-│   ├── pytorch_dataloader.png                 # PyTorch DataLoader architecture
-│   ├── transformer_architecture.jpg           # Transformer encoder-decoder architecture
-│   └── transformer_model.png                  # Transformer sequence mechanism
-│
-├── README.md                                  # Project documentation
-└── LICENSE                                    # MIT License
-```
-
----
 
 ## 🚀 Installation & Usage
 
