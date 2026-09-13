@@ -102,9 +102,9 @@ This allows the model to **jointly attend to information from different represen
 | Maximum Path Length | $O(n)$ — long-range dependencies are hard | $O(1)$ — constant path length between any two positions |
 | Parallelization | Limited | **Fully parallelizable** |
 
-<div align="center">
-  <img src='assets/transformer_architecture.jpg' alt="Transformer Architecture" width="48%">
-  <img src='assets/transformer_model.png' alt="Transformer Sequence Model" width="48%">
+<div align="center" style="margin: 20px 0;">
+  <img src="assets/transformer_model.png" alt="The Transformer Model Architecture (Vaswani et al., 2017)" width="52%">
+  <p><em>Figure: The Transformer Model Architecture (Vaswani et al., 2017)</em></p>
 </div>
 
 ---
@@ -184,7 +184,12 @@ Fine-tuning is remarkably efficient compared to pre-training:
 
 ## 🔀 BERT Variants
 
-BERT has inspired numerous variants and extensions:
+BERT has inspired numerous variants and extensions across architectures, pre-training objectives, and domain-specific applications:
+
+<div align="center" style="margin: 20px 0;">
+  <img src="assets/transformer_architecture.jpg" alt="Evolutionary Tree of BERT Variants and Pre-trained Language Models" width="90%">
+  <p><em>Figure: Evolutionary Tree of Pre-trained Sequence Learning & BERT Variants (THUNLP)</em></p>
+</div>
 
 ### Performance Variants
 
