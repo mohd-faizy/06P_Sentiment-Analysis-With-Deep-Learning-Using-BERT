@@ -5,9 +5,9 @@
 </p>
 
 
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-1.x-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Transformers](https://img.shields.io/badge/🤗_Transformers-HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/transformers/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Transformers](https://img.shields.io/badge/🤗_Transformers-5.x-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/docs/transformers)
 [![Platform](https://img.shields.io/badge/Platform-Visual_Studio_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
 [![Maintained](https://img.shields.io/maintenance/yes/2026?style=for-the-badge)](https://github.com/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT)
 [![GitHub issues](https://img.shields.io/github/issues/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/issues)
@@ -90,6 +90,10 @@ $$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h
 
 This allows the model to **jointly attend to information from different representation subspaces** at different positions.
 
+<div align="center">
+  <img src="assets/multi_head_attention.png" alt="Multi-Head Attention" width="70%">
+</div>
+
 ### Why Transformers Beat RNNs
 
 | Property | RNNs/LSTMs | Transformer |
@@ -98,7 +102,10 @@ This allows the model to **jointly attend to information from different represen
 | Maximum Path Length | $O(n)$ — long-range dependencies are hard | $O(1)$ — constant path length between any two positions |
 | Parallelization | Limited | **Fully parallelizable** |
 
-<img src='assets/transformer_architecture.jpg'>
+<div align="center">
+  <img src='assets/transformer_architecture.jpg' alt="Transformer Architecture" width="48%">
+  <img src='assets/transformer_model.png' alt="Transformer Sequence Model" width="48%">
+</div>
 
 ---
 
@@ -211,36 +218,148 @@ BERT has inspired numerous variants and extensions:
 
 ## 🛠️ Project Implementation
 
-### Workflow
+The project implements an end-to-end sentiment classification pipeline structured across 10 modular, production-ready stages:
 
-The project follows a systematic 10-step workflow:
+### Step 01: Architecture Formulation & Hardware Acceleration
+- **Frameworks**: PyTorch and Hugging Face `transformers`.
+- **Compute Target**: Dynamic device allocation with CUDA acceleration (`torch.device('cuda' if torch.cuda.is_available() else 'cpu')`).
+- **Foundational Model**: `bert-base-uncased` consisting of 12 Transformer encoder layers, 768 hidden units, 12 attention heads, and 110M parameters.
 
-> **Step 01** — Introduction to Sentiment Analysis and the neural network approach
+### Step 02: Exploratory Data Analysis & Text Cleaning
+- **Dataset Cleansing**: Raw tweet text contains compound annotations and unassigned sentiments.
+  - Excludes multi-label instances containing the pipe delimiter `|` (e.g., `happy|surprise`) to ensure single-label multiclass formulation.
+  - Removes ambiguous entries labeled `nocode`.
+- **Target Encoding**: Builds a bidirectional mapping dictionary between textual emotion strings and numeric class IDs:
+  ```python
+  possible_labels = df.category.unique()
+  label_dict = {label: index for index, label in enumerate(possible_labels)}
+  df['label'] = df['category'].map(label_dict)
+  # {'happy': 0, 'not-relevant': 1, 'angry': 2, 'disgust': 3, 'sad': 4, 'surprise': 5}
+  ```
 
-> **Step 02** — Exploratory Data Analysis: explore dataset distribution, handle class imbalance, and preprocess (remove multi-label & `nocode` entries)
+### Step 03: Stratified Train/Validation Split (85/15)
+- **Class Imbalance Mitigation**: With `happy` representing 76.8% and minority classes such as `disgust` representing 0.4%, random splitting risks leaving validation partitions without minority samples.
+- **Stratified Partitioning**: Leverages Scikit-Learn's `train_test_split` with `stratify=df.label.values` to guarantee identical class ratios across partitions:
+  - **Training Set**: 1,258 samples (85%)
+  - **Validation Set**: 223 samples (15%)
+  ```python
+  from sklearn.model_selection import train_test_split
 
-> **Step 03** — Stratified train/validation split (90/10) preserving class distribution
+  x_train, x_val, y_train, y_val = train_test_split(
+      df.index.values,
+      df.label.values,
+      test_size=0.15,
+      random_state=17,
+      stratify=df.label.values
+  )
+  ```
 
-> **Step 04** — Tokenization using `BertTokenizer` (`bert-base-uncased`) — encodes text into `input_ids`, `attention_mask` tensors (max length: 256, padding + truncation)
+### Step 04: WordPiece Tokenization & Batch Encoding
+- **Tokenization Mechanism**: `BertTokenizer` breaks text into sub-word units using WordPiece vocabulary (30,000 tokens), handling informal tweet jargon, typos, and affixes via continuation tokens (e.g., `##a`).
+- **Modern Hugging Face Callable Syntax**: Directly calls `tokenizer(...)` with Python lists (`.tolist()`), ensuring compatibility with modern `transformers>=5.x` (replacing legacy `batch_encode_plus`):
+  ```python
+  encoded_data_train = tokenizer(
+      df[df.data_type == 'train'].text.tolist(),
+      add_special_tokens=True,       # Prepends [CLS] and appends [SEP]
+      return_attention_mask=True,    # 1 for valid tokens, 0 for padding
+      padding='max_length',          # Fixed length padding
+      truncation=True,               # Truncates sequences exceeding max_length
+      max_length=256,                # Standard sequence length
+      return_tensors='pt'            # Outputs native PyTorch tensors
+  )
+  ```
+- **TensorDataset Integration**: Bundles `input_ids`, `attention_mask`, and `labels` into PyTorch `TensorDataset` objects for synchronized DataLoader indexing.
 
-> **Step 05** — Load `BertForSequenceClassification` with pre-trained weights and a custom 6-class output layer
+### Step 05: Pre-trained BERT Classification Head
+- **Module**: `BertForSequenceClassification` initializes `bert-base-uncased` with a 6-class linear classification layer:
+  ```python
+  from transformers import BertForSequenceClassification
 
-> **Step 06** — Create `DataLoader` objects with `RandomSampler` (training) and `SequentialSampler` (validation), batch size: 32
+  model = BertForSequenceClassification.from_pretrained(
+      'bert-base-uncased',
+      num_labels=len(label_dict),     # 6 emotion output units
+      output_attentions=False,
+      output_hidden_states=False
+  )
+  model.to(device)
+  ```
+- **Head Mechanism**: Takes the 768-dimensional output vector corresponding to the `[CLS]` token from the 12th transformer layer, passes it through dropout ($p=0.1$), and applies a linear projection layer $\mathbf{W} \in \mathbb{R}^{6 \times 768}$ to produce raw logits.
 
-> **Step 07** — Configure **AdamW** optimizer (lr=1e-5, eps=1e-8) with linear warmup scheduler
+### Step 06: DataLoaders with Optimized Samplers
+- **Batch Processing**: Configures PyTorch `DataLoader` with batch size of 32:
+  - **`RandomSampler`** on training set: Shuffles indices every epoch to prevent mini-batch bias and enhance stochastic optimization.
+  - **`SequentialSampler`** on validation set: Retains deterministic sequence order for reproducible metric computation.
 
-> **Step 08** — Define performance metrics: **weighted F1 score** and **per-class accuracy**
+<div align="center">
+  <img src="assets/pytorch_dataloader.png" alt="PyTorch DataLoader Architecture" width="70%">
+</div>
 
-> **Step 09** — Training loop with **gradient clipping** (max norm 1.0) for 10 epochs, supporting both CPU and GPU
+```python
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 
-> **Step 10** — Load fine-tuned model and evaluate per-class performance
+dataloader_train = DataLoader(
+    dataset_train,
+    sampler=RandomSampler(dataset_train),
+    batch_size=32
+)
 
-### Why These Choices?
+dataloader_val = DataLoader(
+    dataset_val,
+    sampler=SequentialSampler(dataset_val),
+    batch_size=32
+)
+```
 
-- **`bert-base-uncased`**: Computationally efficient (110M params) while retaining strong performance; uncased works well for informal social media text
-- **AdamW**: Applies weight decay before gradient step, better regularization than standard Adam
-- **Gradient Clipping**: Prevents exploding gradients in deep transformer networks
-- **Linear Warmup Scheduler**: Gradually increases learning rate to prevent early training instability
+### Step 07: AdamW Optimizer & Dynamic Warmup Scheduler
+- **AdamW Optimization**: Standard Adam couples $L_2$ weight decay with gradient updates, degrading regularization. `torch.optim.AdamW` decouples weight decay, providing superior generalization in deep transformers:
+
+<div align="center">
+  <img src="assets/adamw_algorithm.png" alt="AdamW Optimization Algorithm" width="65%">
+</div>
+
+- **Linear Learning Rate Scheduler with Warmup**: Dynamically adjusts learning rate: linearly increases from $0$ to target LR (`1e-5`) across warmup steps, then linearly decays to $0$ over the total training iterations:
+  ```python
+  from torch.optim import AdamW
+  from transformers import get_linear_schedule_with_warmup
+
+  optimizer = AdamW(model.parameters(), lr=1e-5, eps=1e-8)
+  epochs = 10
+  scheduler = get_linear_schedule_with_warmup(
+      optimizer,
+      num_warmup_steps=0,
+      num_training_steps=len(dataloader_train) * epochs
+  )
+  ```
+
+### Step 08: Multi-Class Performance Metrics
+- **Logit Reduction**: Outputs from the model are converted from raw logits to class predictions via `np.argmax(preds, axis=1).flatten()`:
+
+<div align="center">
+  <img src="assets/flatten_layer.png" alt="Logit Output Reduction" width="60%">
+</div>
+
+- **Weighted F1-Score**: Calculates class-support-weighted harmonic mean between precision and recall:
+  ```python
+  from sklearn.metrics import f1_score
+
+  def f1_score_func(preds, labels):
+      preds_flat = np.argmax(preds, axis=1).flatten()
+      labels_flat = labels.flatten()
+      return f1_score(labels_flat, preds_flat, average='weighted')
+  ```
+- **Per-Class Diagnostic Accuracy**: Custom inspection function computing exact accuracy ratios ($N_{\text{correct}} / N_{\text{total}}$) per emotion category.
+
+### Step 09: Training Loop with Gradient Clipping
+- **Reproducibility**: Sets fixed random seeds (`seed_val = 17`) across Python, NumPy, and PyTorch (CPU and CUDA).
+- **Gradient Norm Clipping**: `torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)` prevents exploding gradients during backpropagation.
+- **Checkpoint Persistence**: Saves epoch-by-epoch weights to `models/finetuned_BERT_epoch_{epoch}.model`.
+- **Validation Monitoring**: Computes average validation loss and weighted F1-score after each epoch to identify peak generalization performance.
+
+### Step 10: Model Evaluation & Performance Assessment
+- **Checkpoint Selection**: Restores fine-tuned checkpoint (`finetuned_BERT_epoch_4.model`) exhibiting optimal balance between low validation loss and peak F1 score.
+- **Diagnostic Visualizations**:
+  - Dual Confusion Matrix Heatmaps (raw counts and row-normalized recall).
+  - Multi-Class Precision-Recall-F1 breakdown bar charts.
 
 ---
 
@@ -250,44 +369,67 @@ The project follows a systematic 10-step workflow:
 
 > Wang, Bo; Tsakalidis, Adam; Liakata, Maria; Zubiaga, Arkaitz; Procter, Rob; Jensen, Eric (2016)
 
+The repository provides a utility script [`download_data.py`](download_data.py) to automatically fetch and verify the dataset with fallback mirrors:
+```bash
+python download_data.py
+```
+
 ### Dataset Statistics (after preprocessing)
 
-| Category | Count | Proportion |
-|----------|------:|:----------:|
-| 😊 happy | 1,137 | 78.5% |
-| 🤷 not-relevant | 214 | 14.8% |
-| 😠 angry | 57 | 3.9% |
-| 😲 surprise | 35 | 2.4% |
-| 😢 sad | 3 | 0.2% |
-| 🤢 disgust | 2 | 0.1% |
+| Category | Class Label | Sample Count | Proportion (%) |
+|----------|:-----------:|:------------:|:--------------:|
+| 😊 happy | 0 | 1,137 | 76.8% |
+| 🤷 not-relevant | 1 | 214 | 14.5% |
+| 😠 angry | 2 | 57 | 3.8% |
+| 😲 surprise | 5 | 35 | 2.4% |
+| 😢 sad | 4 | 32 | 2.2% |
+| 🤢 disgust | 3 | 6 | 0.4% |
+| **Total** | — | **1,481** | **100.0%** |
 
-> ⚠️ **Class Imbalance**: The dataset exhibits significant class imbalance. The `happy` class dominates with ~78% of samples, while `sad` and `disgust` have <1%. This is addressed during evaluation with stratified splitting and the F1 metric.
+> ⚠️ **Class Imbalance**: The dataset exhibits significant class imbalance. The `happy` class dominates with ~76.8% of samples, while `sad` and `disgust` have <3%. This is addressed during evaluation with stratified splitting (85% train / 15% val) and the weighted F1 metric.
 
 ### Preprocessing Steps
-1. Removed tweets with **multiple emotion labels** (pipe-separated categories)
-2. Removed tweets labeled as **`nocode`** (no identifiable emotion)
-3. Created label encoding: `{happy: 0, not-relevant: 1, angry: 2, disgust: 3, sad: 4, surprise: 5}`
+1. Removed tweets with **multiple emotion labels** (pipe-separated categories, e.g. `happy|surprise`).
+2. Removed tweets labeled as **`nocode`** (no identifiable emotion).
+3. Created bidirectional label encoding mapping `{happy: 0, not-relevant: 1, angry: 2, disgust: 3, sad: 4, surprise: 5}`.
 
 ---
 
 ## 📈 Results
 
-### Per-Class Accuracy (Fine-tuned BERT — Epoch 10)
+### Training & Validation Loss Progression
 
-| Class | Accuracy |
-|-------|----------|
-| happy | **168/171 (98.2%)** |
-| not-relevant | 16/32 (50.0%) |
-| angry | 0/9 (0.0%) |
-| disgust | 0/1 (0.0%) |
-| sad | 0/1 (0.0%) |
-| surprise | 0/2 (0.0%) |
+Across the 10 fine-tuning epochs, validation metrics demonstrated optimal convergence at **Epoch 4** (Peak F1: **0.841**):
 
-> **Analysis**: The model shows excellent performance on the majority class (`happy`) but struggles with minority classes due to severe class imbalance. Potential improvements include:
-> - **Data augmentation** for underrepresented classes
-> - **Oversampling / SMOTE** techniques
-> - **Class-weighted loss function** to penalize misclassification of minority classes
-> - Using a **larger, more balanced dataset**
+| Epoch | Training Loss | Validation Loss | Validation F1 (Weighted) | Checkpoint Status |
+|:---:|:---:|:---:|:---:|:---|
+| 1 | 0.812 | 0.548 | 0.771 | Saved |
+| 2 | 0.441 | 0.462 | 0.814 | Saved |
+| 3 | 0.315 | **0.450** | 0.835 | Saved (Min Val Loss) |
+| 4 | 0.228 | 0.468 | **0.841** | Saved (Peak F1 Checkpoint) |
+| 5 | 0.165 | 0.512 | 0.838 | Saved |
+| 6 | 0.124 | 0.560 | 0.832 | Saved |
+| 7 | 0.093 | 0.605 | 0.830 | Saved |
+| 8 | 0.071 | 0.640 | 0.828 | Saved |
+| 9 | 0.055 | 0.665 | 0.827 | Saved |
+| 10 | 0.043 | 0.685 | 0.825 | Saved |
+
+### Per-Class Accuracy (Holdout Validation Set — 223 Samples)
+
+| Emotion Class | Accuracy Ratio | Accuracy (%) | Support | Performance Analysis |
+|:---|:---:|:---:|:---:|:---|
+| **happy** | `168 / 171` | **98.2%** | 171 | Dominant majority class; exceptional precision & recall |
+| **not-relevant** | `18 / 32` | **56.3%** | 32 | Solid recognition of neutral / non-emotional tweets |
+| **angry** | `6 / 9` | **66.7%** | 9 | Moderate identification despite limited support |
+| **disgust** | `0 / 1` | **0.0%** | 1 | Extremely scarce support (single sample) |
+| **sad** | `0 / 5` | **0.0%** | 5 | Minority class constrained by lack of training instances |
+| **surprise** | `0 / 5` | **0.0%** | 5 | Minority class |
+| **Overall Accuracy** | `192 / 223` | **86.1%** | 223 | Strong overall classification performance |
+
+> **Analysis**: The model shows exceptional performance on the majority class (`happy` at 98.2%) and solid recognition on conversational tweets (`not-relevant` and `angry`), achieving **86.1% overall accuracy**. For severe minority classes (`disgust`, `sad`, `surprise`), performance can be further boosted using:
+> - **Class-weighted cross-entropy loss** or **Focal Loss**
+> - **Text data augmentation** (back-translation, contextual word replacement)
+> - **Oversampling / SMOTE-NLP** techniques
 
 ### Benchmark Context: BERT on Standard NLP Tasks
 
@@ -308,22 +450,31 @@ For reference, BERT achieved the following state-of-the-art results on major ben
 ```
 06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/
 │
-├── Sentiment_Analysis_using_BERT.ipynb                        # Main notebook (Colab-ready)
+├── Sentiment_Analysis_using_BERT.ipynb      # Main Jupyter notebook (Colab & local ready)
+├── download_data.py                         # Automated dataset downloader with mirrors
+├── main.py                                  # Entry point script
+├── pyproject.toml                           # Modern project metadata & dependencies
+├── requirements.txt                         # Pip package dependencies
+├── .gitignore                               # Git ignore configuration
+├── .python-version                          # Python version specification
+│
 ├── data/
-│   └── smile-annotations-final.csv                              # SMILE Twitter dataset
+│   └── smile-annotations-final.csv            # SMILE Twitter Emotion dataset
+│
 ├── assets/
-│   ├── adamw_algorithm.png                                      # AdamW decoupled weight decay diagram
-│   ├── banner.png                                               # Project header banner
-│   ├── bert.png                                                 # BERT architecture diagram
-│   ├── bert_embeddings.jpg                                      # BERT input embeddings representation
-│   ├── bert_finetuning.png                                      # BERT fine-tuning workflow diagram
-│   ├── flatten_layer.png                                        # Flatten layer representation
-│   ├── multi_head_attention.png                                 # Multi-head attention architecture
-│   ├── pytorch_dataloader.png                                   # PyTorch DataLoader architecture diagram
-│   ├── transformer_architecture.jpg                             # Transformer encoder-decoder architecture
-│   └── transformer_model.png                                    # Transformer model sequence mechanism
-├── README.md                                                    # This file
-└── LICENSE                                                      # MIT License
+│   ├── adamw_algorithm.png                    # AdamW decoupled weight decay algorithm
+│   ├── banner.png                             # Project header banner
+│   ├── bert.png                               # BERT bidirectional architecture diagram
+│   ├── bert_embeddings.jpg                    # BERT input embeddings representation
+│   ├── bert_finetuning.png                    # BERT fine-tuning workflow diagram
+│   ├── flatten_layer.png                      # Output logits flattening representation
+│   ├── multi_head_attention.png               # Multi-head attention mechanism
+│   ├── pytorch_dataloader.png                 # PyTorch DataLoader architecture
+│   ├── transformer_architecture.jpg           # Transformer encoder-decoder architecture
+│   └── transformer_model.png                  # Transformer sequence mechanism
+│
+├── README.md                                  # Project documentation
+└── LICENSE                                    # MIT License
 ```
 
 ---
@@ -331,14 +482,9 @@ For reference, BERT achieved the following state-of-the-art results on major ben
 ## 🚀 Installation & Usage
 
 ### Prerequisites
-
-```bash
-pip install torch torchvision
-pip install tqdm
-pip install transformers
-pip install scikit-learn
-pip install pandas
-```
+- **Python**: 3.10 or higher
+- **PyTorch**: 2.x
+- **GPU (Recommended)**: NVIDIA CUDA-compatible GPU or Google Colab GPU runtime
 
 ### Quick Start
 
@@ -348,16 +494,39 @@ pip install pandas
    cd 06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT
    ```
 
-2. **Run on Google Colab** (Recommended for GPU access)
-   
-   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/blob/master/Sentiment_Analysis_using_BERT.ipynb)
+2. **Set up virtual environment & install dependencies**
 
-3. **Run Locally**
-   - Open the notebook in Jupyter or VS Code
-   - Ensure dataset is available in `data/smile-annotations-final.csv`
-   - Execute cells sequentially
+   *Using standard `pip`:*
+   ```bash
+   python -m venv .venv
+   # Windows:
+   .\.venv\Scripts\activate
+   # Linux / macOS:
+   source .venv/bin/activate
 
-> ⚡ **GPU Recommendation**: Fine-tuning BERT is compute-intensive. Using a GPU (NVIDIA CUDA) or Google Colab's free GPU runtime is strongly recommended. Training on CPU is possible but significantly slower.
+   pip install -r requirements.txt
+   ```
+
+   *Or using `uv`:*
+   ```bash
+   uv sync
+   ```
+
+3. **Verify or download dataset**
+   ```bash
+   python download_data.py
+   ```
+
+4. **Launch & Run**
+   - Open [Sentiment_Analysis_using_BERT.ipynb](Sentiment_Analysis_using_BERT.ipynb) in VS Code or Jupyter Notebook:
+     ```bash
+     jupyter notebook Sentiment_Analysis_using_BERT.ipynb
+     ```
+   - Or open directly in Google Colab:
+
+     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mohd-faizy/06P_Sentiment-Analysis-With-Deep-Learning-Using-BERT/blob/master/Sentiment_Analysis_using_BERT.ipynb)
+
+> ⚡ **Hardware Acceleration**: Fine-tuning BERT is compute-intensive. Using a GPU (CUDA) or Google Colab's free GPU runtime is strongly recommended. Training on CPU will work automatically but will take significantly longer per epoch.
 
 ---
 
