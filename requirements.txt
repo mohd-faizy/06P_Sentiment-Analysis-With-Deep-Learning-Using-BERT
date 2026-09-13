@@ -1,0 +1,21 @@
+# Deep Learning & NLP Frameworks
+torch
+torchvision
+transformers
+
+# Scientific Computing & Data Processing
+pandas
+numpy
+scikit-learn
+
+# Data Visualization
+matplotlib
+seaborn
+
+# Utilities & Progress Tracking
+tqdm
+ipywidgets
+
+# Interactive Notebook Environment
+jupyter
+ipykernel
